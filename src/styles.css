@@ -38,3 +38,16 @@ body {
   margin-top: 10px;
   display: none;
 }
+
+#weatherContainer {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  display: none; /* Initially hidden */
+}
+
+.forecast-item {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+}

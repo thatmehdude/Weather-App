@@ -52,6 +52,10 @@ async function getData(city){
         const weather = await response.json();
         const processedData = processWeatherData(weather);
         console.log('Processed weather data:', processedData);
+        //display data on the page
+        if (processedData) {
+            displayWeatherData(processedData);
+        }
         return processedData;
     } catch (error) {
         showError(error.message);
@@ -68,6 +72,43 @@ function clearError(){
     errorDiv.style.display = 'none';
     errorDiv.textContent = '';
 }
+
+function displayWeatherData(data) {
+    const cityNameDiv = document.querySelector('#cityName');
+    const tempDiv = document.querySelector('#temperature');
+    const conditionsDiv = document.querySelector('#conditions');
+    const windSpeedDiv = document.querySelector('#windSpeed');
+    const precipDiv = document.querySelector('#precipitation');
+    const forecastContainer = document.querySelector('#forecastItems');
+    const forecastTemplate = document.querySelector('.forecast-item.template');
+  
+    // Update current weather
+    cityNameDiv.textContent = `Weather in ${data.location.city}`;
+    tempDiv.textContent = `Temperature: ${data.current.temp}°C`;
+    conditionsDiv.textContent = `Conditions: ${data.current.conditions}`;
+    windSpeedDiv.textContent = `Wind Speed: ${data.current.windSpeed} km/h`;
+    precipDiv.textContent = `Precipitation: ${data.current.precipprob}%`;
+  
+    // Clear previous forecast items
+    forecastContainer.innerHTML = '';
+  
+    // Populate 5-day forecast
+    data.forecast.forEach(day => {
+      const forecastItem = forecastTemplate.cloneNode(true);
+      forecastItem.classList.remove('template');
+      forecastItem.style.display = ''; // Make it visible
+  
+      forecastItem.querySelector('.forecast-date').textContent = day.datetime;
+      forecastItem.querySelector('.forecast-max-temp').textContent = `Max Temp: ${day.tempmax}°C`;
+      forecastItem.querySelector('.forecast-min-temp').textContent = `Min Temp: ${day.tempmin}°C`;
+      forecastItem.querySelector('.forecast-conditions').textContent = `Conditions: ${day.conditions}`;
+  
+      forecastContainer.appendChild(forecastItem);
+    });
+  
+    // Show the weather container (if hidden initially)
+    document.getElementById('weatherContainer').style.display = 'block';
+  }
 
 submitButton.addEventListener('click', async (e) => {
     e.preventDefault();
