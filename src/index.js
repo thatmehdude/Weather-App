@@ -1,7 +1,34 @@
 import "./styles.css";
+//ensure DOM is fully loaded
+function domReady(callback) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", callback);
+    } else {
+      callback();
+    }
+  }
 
-const submitButton = document.querySelector('button');
-const errorDiv = document.querySelector('#errorMessage');
+  // Helper for safely selecting DOM elements
+function getElement(selector) {
+    const element = document.querySelector(selector);
+    if (!element) {
+      console.error(`Element not found: ${selector}`);
+    }
+    return element;
+  }
+  
+  // Main application logic
+function initWeatherApp() {
+    const submitButton = getElement("button");
+    const errorDiv = getElement("#errorMessage");
+    const forecastTemplate = getElement(".forecast-item.template");
+    const weatherContainer = getElement("#weatherContainer");
+    const forecastContainer = getElement("#forecastItems");
+  
+    if (!submitButton || !errorDiv || !forecastTemplate || !weatherContainer || !forecastContainer) {
+      return; // Abort initialization if critical elements are missing
+    }
+
 
 
 function createURL(city){
@@ -83,8 +110,7 @@ function displayWeatherData(data) {
     const conditionsDiv = document.querySelector('#conditions');
     const windSpeedDiv = document.querySelector('#windSpeed');
     const precipDiv = document.querySelector('#precipitation');
-    const forecastContainer = document.querySelector('#forecastItems');
-    const forecastTemplate = document.querySelector('.forecast-item.template');
+    
   
     // Update current weather
     cityNameDiv.textContent = `Weather in ${data.location.city}`;
@@ -111,7 +137,7 @@ function displayWeatherData(data) {
     });
   
     // Show the weather container (if hidden initially)
-    document.getElementById('weatherContainer').style.display = 'block';
+    weatherContainer.style.display = "block";
   }
 
 submitButton.addEventListener('click', async (e) => {
@@ -126,4 +152,7 @@ submitButton.addEventListener('click', async (e) => {
         showError('Please enter a city name');
     }
 });
+}
 
+// Initialize the app
+domReady(initWeatherApp);
