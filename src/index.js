@@ -156,3 +156,5 @@ submitButton.addEventListener('click', async (e) => {
 
 // Initialize the app
 domReady(initWeatherApp);
+
+//fix deployment
