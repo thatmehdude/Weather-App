@@ -10,6 +10,10 @@ function createURL(city){
     return startUrl + city.toLowerCase() + endURL;
 }
 
+function fahrenheitToCelsius(fahrenheit) {
+    return ((fahrenheit - 32) * 5) / 9;
+}
+
 function processWeatherData(weatherData){
     if (!weatherData) return null;
 
@@ -20,7 +24,7 @@ function processWeatherData(weatherData){
             timezone: weatherData.timezone,
         },
         current: {
-            temp: current.temp,
+            temp: fahrenheitToCelsius(current.temp).toFixed(1),
             conditions: current.conditions,
             icon: current.icon,
             precipprob: current.precipprob,
@@ -29,8 +33,8 @@ function processWeatherData(weatherData){
         //next 5 days forecast
         forecast: weatherData.days.slice(0, 5).map(day => ({
             datetime: day.datetime,
-            tempmax: day.tempmax,
-            tempmin: day.tempmin,
+            tempmax: fahrenheitToCelsius(day.tempmax).toFixed(1),
+            tempmin: fahrenheitToCelsius(day.tempmin).toFixed(1),
             conditions: day.conditions,
             icon: day.icon,
         })),
